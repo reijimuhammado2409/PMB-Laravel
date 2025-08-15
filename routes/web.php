@@ -3,13 +3,25 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\AgamaController;
+use App\Http\Controllers\Admin\FakultasController;
+use App\Http\Controllers\Admin\JurusanController;
 
-// halaman Default
+
+/*
+|--------------------------------------------------------------------------
+| Halaman Default
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Login & Register
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -18,25 +30,45 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Change Password (hanya untuk user login)
 Route::post('/change-password', [AuthController::class, 'changePassword'])
     ->middleware('auth')
     ->name('change.password');
 
-// ✅ Tambahkan route tes ini untuk memastikan login tidak infinite loop
-// Route::get('/admin-test', function() {
-//     return 'Halo Admin, login berhasil!';
-// })->middleware('auth');
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
-// Route::get('/mahasiswa-test', function() {
-//     return 'Halo Mahasiswa, login berhasil!';
-// })->middleware('auth');
+        // Master Data
+        Route::resource('agama', AgamaController::class);
+        Route::resource('fakultas', FakultasController::class)
+        ->parameters(['fakultas' => 'fakultas']);
+        Route::resource('jurusan', JurusanController::class)
+        ->parameters(['jurusan' => 'jurusan']);
 
-// Dashboard untuk Admin
-Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
-    ->middleware(['auth', 'admin'])
-    ->name('admin.dashboard');
 
-Route::get('/mahasiswa/dashboard', [DashboardController::class, 'mahasiswa'])
-    ->middleware(['auth', 'mahasiswa'])
-    ->name('mahasiswa.dashboard');
+        
+        // nanti tinggal tambahin fakultas, jurusan, provinsi, kabupaten, kecamatan, dst.
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Mahasiswa Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'mahasiswa'])
+    ->prefix('mahasiswa')
+    ->name('mahasiswa.')
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'mahasiswa'])->name('dashboard');
+
+        // nanti bisa tambahkan route untuk pendaftaran, pembayaran, dll
+    });
