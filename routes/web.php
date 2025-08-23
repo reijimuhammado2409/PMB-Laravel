@@ -6,7 +6,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\AgamaController;
 use App\Http\Controllers\Admin\FakultasController;
 use App\Http\Controllers\Admin\JurusanController;
-
+use App\Http\Controllers\Admin\ProvinsiController;
+use App\Http\Controllers\Admin\KabupatenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,10 @@ Route::middleware(['auth', 'admin'])
         ->parameters(['fakultas' => 'fakultas']);
         Route::resource('jurusan', JurusanController::class)
         ->parameters(['jurusan' => 'jurusan']);
+        Route::resource('provinsi', ProvinsiController::class)
+        ->parameters(['provinsi' => 'provinsi']);
+        Route::resource('kabupaten', KabupatenController::class)
+        ->parameters(['kabupaten' => 'kabupaten']);
 
 
         

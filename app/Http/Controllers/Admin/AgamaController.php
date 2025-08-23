@@ -9,10 +9,27 @@ use Illuminate\Validation\Rule;
 
 class AgamaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = Agama::orderBy('nama')->paginate(7); // <- pakai $items
-        return view('admin.agama.index', compact('items'));
+         $query = Agama::query();
+
+    // 🔍 Pencarian
+    if ($request->has('q') && $request->q != '') {
+        $query->where('nama', 'like', '%' . $request->q . '%');
+    }
+
+    // ⬆️⬇️ Sorting
+    $sort = $request->get('sort', 'nama'); // default: nama
+    $direction = $request->get('direction', 'asc'); // default: asc
+    $query->orderBy($sort, $direction);
+
+    $items = $query->paginate(7)->appends($request->all());
+
+    return view('admin.agama.index', [
+        'items' => $items,
+        'title' => 'agama',
+        'route' => 'agama'
+    ]);
     }
 
     public function create()

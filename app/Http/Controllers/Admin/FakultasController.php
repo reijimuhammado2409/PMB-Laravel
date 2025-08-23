@@ -9,10 +9,27 @@ use Illuminate\Validation\Rule;
 
 class FakultasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = Fakultas::orderBy('nama')->paginate(7);
-        return view('admin.fakultas.index', compact('items'));
+        $query = Fakultas::query();
+
+        // 🔍 Pencarian
+        if ($request->has('q') && $request->q != '') {
+            $query->where('nama', 'like', '%' . $request->q . '%');
+        }
+
+        // ⬆️⬇️ Sorting
+        $sort = $request->get('sort', 'nama'); // default: nama
+        $direction = $request->get('direction', 'asc'); // default: asc
+        $query->orderBy($sort, $direction);
+
+        $items = $query->paginate(7)->appends($request->all());
+
+        return view('admin.fakultas.index', [
+            'items' => $items,
+            'title' => 'fakultas',
+            'route' => 'fakultas'
+        ]);
     }
 
     public function create()
@@ -23,7 +40,7 @@ class FakultasController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:50|unique:fakultas,nama',
+            'nama' => 'required|string|max:100|unique:fakultas,nama',
         ]);
 
         Fakultas::create($validated);
@@ -38,7 +55,12 @@ class FakultasController extends Controller
     public function update(Request $request, Fakultas $fakultas)
     {
         $validated = $request->validate([
-            'nama' => ['required','string','max:50', Rule::unique('fakultas','nama')->ignore($fakultas->id)],
+            'nama' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('fakultas', 'nama')->ignore($fakultas->id)
+            ],
         ]);
 
         $fakultas->update($validated);

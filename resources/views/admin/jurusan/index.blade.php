@@ -16,13 +16,54 @@
 </div>
 @endif
 
+{{-- 🔍 Form Pencarian --}}
+<form method="GET" action="{{ route('admin.jurusan.index') }}" class="mb-4 flex space-x-2">
+    <input type="text" name="q" value="{{ request('q') }}"
+           placeholder="Cari jurusan / fakultas..."
+           class="border border-gray-300 rounded-lg px-3 py-2 w-64 focus:ring focus:ring-blue-200">
+    <button type="submit"
+            class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg shadow">
+        Cari
+    </button>
+    @if(request('q'))
+        <a href="{{ route('admin.jurusan.index') }}"
+           class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg shadow">
+            Reset
+        </a>
+    @endif
+</form>
+
 <div class="bg-white rounded-lg shadow overflow-hidden">
     <table class="min-w-full text-sm">
         <thead class="bg-gray-900 text-white uppercase text-xs tracking-wider">
             <tr>
                 <th class="px-6 py-3 text-left w-16">No</th>
-                <th class="px-6 py-3 text-left">Nama Jurusan</th>
-                <th class="px-6 py-3 text-left">Fakultas</th>
+                {{-- Sorting Nama Jurusan --}}
+                <th class="px-6 py-3 text-left">
+                    <a href="{{ route('admin.jurusan.index', [
+                            'sort' => 'nama',
+                            'direction' => request('direction') === 'asc' ? 'desc' : 'asc',
+                            'q' => request('q')
+                        ]) }}" class="flex items-center space-x-1">
+                        <span>Nama Jurusan</span>
+                        @if(request('sort') === 'nama')
+                            <span>{{ request('direction') === 'asc' ? '⬆️' : '⬇️' }}</span>
+                        @endif
+                    </a>
+                </th>
+                {{-- Sorting Fakultas --}}
+                <th class="px-6 py-3 text-left">
+                    <a href="{{ route('admin.jurusan.index', [
+                            'sort' => 'fakultas_id',
+                            'direction' => request('direction') === 'asc' ? 'desc' : 'asc',
+                            'q' => request('q')
+                        ]) }}" class="flex items-center space-x-1">
+                        <span>Fakultas</span>
+                        @if(request('sort') === 'fakultas_id')
+                            <span>{{ request('direction') === 'asc' ? '⬆️' : '⬇️' }}</span>
+                        @endif
+                    </a>
+                </th>
                 <th class="px-6 py-3 text-center w-40">Aksi</th>
             </tr>
         </thead>
@@ -31,9 +72,7 @@
                 <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4">{{ $items->firstItem() + $index }}</td>
                     <td class="px-6 py-4">{{ $i->nama }}</td>
-                    <td class="px-6 py-4">
-                        {{ $i->fakultas->nama ?? '-' }}
-                    </td>
+                    <td class="px-6 py-4">{{ $i->fakultas->nama ?? '-' }}</td>
                     <td class="px-6 py-4 text-center flex items-center justify-center space-x-2">
                         {{-- Tombol Edit --}}
                         <a href="{{ route('admin.jurusan.edit',$i) }}"

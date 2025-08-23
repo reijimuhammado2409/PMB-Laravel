@@ -100,12 +100,12 @@
                     </button>
                     <ul x-show="wilayahOpen" class="pl-6 mt-1 space-y-1" x-cloak>
                         <li>
-                            <a href="#" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
+                            <a href="{{ route('admin.provinsi.index') }}" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
                                 🏛 <span>Provinsi</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
+                            <a href="{{ route('admin.kabupaten.index') }}" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
                                 🏢 <span>Kabupaten</span>
                             </a>
                         </li>

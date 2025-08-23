@@ -1,5 +1,5 @@
 @extends('layouts.dashboard-admin')
-@section('title','fakultas')
+@section('title','Fakultas')
 
 @section('content')
 <div class="flex items-center justify-between mb-4">
@@ -16,12 +16,38 @@
 </div>
 @endif
 
+{{-- 🔍 Form Pencarian --}}
+<form method="GET" action="{{ route('admin.fakultas.index') }}" class="mb-4 flex space-x-2">
+    <input type="text" name="q" value="{{ request('q') }}"
+           placeholder="Cari fakultas..."
+           class="border border-gray-300 rounded-lg px-3 py-2 w-64 focus:ring focus:ring-blue-200">
+    <button type="submit"
+            class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-lg shadow">
+        Cari
+    </button>
+    @if(request('q'))
+        <a href="{{ route('admin.fakultas.index') }}"
+           class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg shadow">
+            Reset
+        </a>
+    @endif
+</form>
+
 <div class="bg-white rounded-lg shadow overflow-hidden">
     <table class="min-w-full text-sm">
         <thead class="bg-gray-900 text-white uppercase text-xs tracking-wider">
             <tr>
                 <th class="px-6 py-3 text-left w-16">No</th>
-                <th class="px-6 py-3 text-left">Nama Fakultas</th>
+                {{-- ⬆️⬇️ Sorting link --}}
+                <th class="px-6 py-3 text-left">
+                    <a href="{{ route('admin.fakultas.index', ['sort' => 'nama', 'direction' => request('direction') === 'asc' ? 'desc' : 'asc', 'q' => request('q')]) }}"
+                       class="flex items-center space-x-1">
+                        <span>Nama Fakultas</span>
+                        @if(request('sort') === 'nama')
+                            <span>{{ request('direction') === 'asc' ? '⬆️' : '⬇️' }}</span>
+                        @endif
+                    </a>
+                </th>
                 <th class="px-6 py-3 text-center w-40">Aksi</th>
             </tr>
         </thead>

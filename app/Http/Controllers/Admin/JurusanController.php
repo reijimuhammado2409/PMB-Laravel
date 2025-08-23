@@ -10,10 +10,30 @@ use Illuminate\Validation\Rule;
 
 class JurusanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $items = Jurusan::with('fakultas')->orderBy('nama')->paginate(7);
-        return view('admin.jurusan.index', compact('items'));
+        $query = Jurusan::with('fakultas');
+
+        // 🔍 Pencarian
+        if ($request->has('q') && $request->q != '') {
+            $query->where('nama', 'like', '%' . $request->q . '%')
+                  ->orWhereHas('fakultas', function($q) use ($request) {
+                      $q->where('nama', 'like', '%' . $request->q . '%');
+                  });
+        }
+
+        // ⬆️⬇️ Sorting
+        $sort = $request->get('sort', 'nama'); // default nama jurusan
+        $direction = $request->get('direction', 'asc'); // default asc
+        $query->orderBy($sort, $direction);
+
+        $items = $query->paginate(7)->appends($request->all());
+
+        return view('admin.jurusan.index', [
+            'items' => $items,
+            'title' => 'jurusan',
+            'route' => 'jurusan'
+        ]);
     }
 
     public function create()
