@@ -5,6 +5,7 @@
         </li>
         <li><a href="{{ route('mahasiswa.pendaftaran.create') }}"
                 class="block py-2 px-3 hover:bg-gray-700 rounded">Pendaftaran</a></li>
-        <li><a href="#" class="block py-2 px-3 hover:bg-gray-700 rounded">Status Penerimaan</a></li>
+        <li><a href="{{ route('mahasiswa.pendaftaran.status') }}" class="block py-2 px-3 hover:bg-gray-700 rounded">Status
+                Penerimaan</a></li>
     </ul>
 </aside>

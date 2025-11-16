@@ -21,25 +21,25 @@ class MahasiswaController extends Controller
     */
 
     // Tampilkan form pendaftaran
-            public function create()
-        {
-            // Ambil user yang sedang login
-            $userId = Auth::user()->id;
+    public function create()
+    {
+        // Ambil user yang sedang login
+        $userId = Auth::user()->id;
 
-            // Cek apakah user sudah ada di tabel mahasiswa
-            $mahasiswa = Mahasiswa::where('user_id', $userId)->first();
+        // Cek apakah user sudah ada di tabel mahasiswa
+        $mahasiswa = Mahasiswa::where('user_id', $userId)->first();
 
-            if ($mahasiswa) {
-                // Jika ditemukan → lempar ke route validasiAdmin
-                return redirect()->to('/mahasiswa/validasimahasiswa');
-            }
-
-            // Jika tidak ditemukan → tampilkan form pendaftaran mahasiswa
-            return view('mahasiswa.pendaftaran.create', [
-                'agama' => Agama::all(),
-                'provinsi' => Provinsi::all()
-        ]);
+        if ($mahasiswa) {
+            // Jika ditemukan → lempar ke route validasiAdmin
+            return redirect()->to('/mahasiswa/validasimahasiswa');
         }
+
+        // Jika tidak ditemukan → tampilkan form pendaftaran mahasiswa
+        return view('mahasiswa.pendaftaran.create', [
+            'agama' => Agama::all(),
+            'provinsi' => Provinsi::all()
+        ]);
+    }
 
     // Simpan data pendaftaran
     public function store(Request $request)
@@ -82,9 +82,9 @@ class MahasiswaController extends Controller
     // Cek status pendaftaran
     public function status()
     {
-        $mhs = Mahasiswa::where('user_id', Auth::id())->first();
+        $mhs = Mahasiswa::where('user_id', Auth::id())->value('status');
 
-        return view('mahasiswa.pendaftaran.status', compact('mhs'));
+        return view('mahasiswa.pendaftaran.statusPendaftaran', compact('mhs'));
     }
 
     /*
@@ -143,7 +143,8 @@ class MahasiswaController extends Controller
     }
 
     //validasi mahasiswa oleh admin
-    public function validasiMahasiswa(){
+    public function validasiMahasiswa()
+    {
         $mahasiswa = Mahasiswa::where('user_id', Auth::user()->id)->first();
 
         return view('mahasiswa.validasiMahasiswa', compact('mahasiswa'));
