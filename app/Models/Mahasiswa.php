@@ -24,8 +24,6 @@ class Mahasiswa extends Model
         'status_menikah',
         'kewarganegaraan',
         'negara_asal',
-        'jurusan_id',
-        'penghasilan_ortu',
         'foto',
         'status'
     ];
@@ -51,14 +49,6 @@ class Mahasiswa extends Model
         return $this->belongsTo(Kecamatan::class);
     }
 
-    // Relasi ke Jurusan
-    public function jurusan() {
-        return $this->belongsTo(Jurusan::class);
-    }
-
-    // Relasi ke Pembayaran
-    public function pembayaran() {
-        return $this->hasMany(Pembayaran::class);
-    }
+    
 }
 

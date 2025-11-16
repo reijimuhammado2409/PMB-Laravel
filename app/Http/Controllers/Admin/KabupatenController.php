@@ -80,4 +80,11 @@ class KabupatenController extends Controller
         $kabupaten->delete();
         return redirect()->route('admin.kabupaten.index')->with('success', 'Kabupaten berhasil dihapus.');
     }
+
+    // public function getByProvinsi($provinsi_id)
+    // {
+    //     return response()->json(
+    //         Kabupaten::where('provinsi_id', $provinsi_id)->orderBy('nama')->get()
+    //     );
+    // }
 }

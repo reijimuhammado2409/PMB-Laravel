@@ -43,9 +43,9 @@ class AuthController extends Controller
         //     return redirect('/mahasiswa-test'); // sementara
         // }
 
-        // return back()->withErrors([
-        //     'email' => 'Email atau password salah.',
-        // ]);
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ]);
     }
 
     // 🔹 Halaman Register

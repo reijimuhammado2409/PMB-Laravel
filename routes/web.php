@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\FakultasController;
 use App\Http\Controllers\Admin\JurusanController;
 use App\Http\Controllers\Admin\ProvinsiController;
 use App\Http\Controllers\Admin\KabupatenController;
+use App\Http\Controllers\Admin\KecamatanController;
+use App\Http\Controllers\Mahasiswa\MahasiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,18 +51,27 @@ Route::middleware(['auth', 'admin'])
 
         // Master Data
         Route::resource('agama', AgamaController::class);
-        Route::resource('fakultas', FakultasController::class)
-        ->parameters(['fakultas' => 'fakultas']);
-        Route::resource('jurusan', JurusanController::class)
-        ->parameters(['jurusan' => 'jurusan']);
+        
         Route::resource('provinsi', ProvinsiController::class)
         ->parameters(['provinsi' => 'provinsi']);
         Route::resource('kabupaten', KabupatenController::class)
         ->parameters(['kabupaten' => 'kabupaten']);
+        Route::resource('kecamatan', KecamatanController::class)
+        ->parameters(['kecamatan' => 'kecamatan']);
 
+        // 🔹 Route tambahan untuk AJAX dropdown
+        Route::get('/get-kabupaten/{provinsi_id}', [KecamatanController::class, 'getKabupatenByProvinsi'])
+        ->name('kecamatan.getKabupatenByProvinsi');
+                
+        // CRUD Pendaftaran Mahasiswa
+        Route::get('/pendaftaran', [MahasiswaController::class, 'index'])->name('pendaftaran.index');
+        Route::get('/pendaftaran/{id}/edit', [MahasiswaController::class, 'edit'])->name('pendaftaran.edit');
+        Route::put('/pendaftaran/{id}', [MahasiswaController::class, 'update'])->name('pendaftaran.update');
+        Route::delete('/pendaftaran/{id}', [MahasiswaController::class, 'destroy'])->name('pendaftaran.destroy');
 
-        
-        // nanti tinggal tambahin fakultas, jurusan, provinsi, kabupaten, kecamatan, dst.
+        // Approve / Reject Mahasiswa
+        Route::put('/pendaftaran/{id}/approve', [MahasiswaController::class, 'approve'])->name('pendaftaran.approve');
+        Route::put('/pendaftaran/{id}/reject', [MahasiswaController::class, 'reject'])->name('pendaftaran.reject');
     });
 
 /*
@@ -75,5 +86,14 @@ Route::middleware(['auth', 'mahasiswa'])
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'mahasiswa'])->name('dashboard');
 
-        // nanti bisa tambahkan route untuk pendaftaran, pembayaran, dll
+        // Form Pendaftaran Mahasiswa
+
+        // Form create
+        Route::get('/pendaftaran', [MahasiswaController::class, 'create'])->name('pendaftaran.create');
+
+        // Store
+        Route::post('/pendaftaran', [MahasiswaController::class, 'store'])->name('pendaftaran.store');
+
+        // Cek Status Pendaftaran
+        Route::get('/pendaftaran/status', [MahasiswaController::class, 'status'])->name('pendaftaran.status');
     });

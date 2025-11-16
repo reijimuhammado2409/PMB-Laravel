@@ -24,13 +24,7 @@
             </a>
         </li>
 
-        {{-- Pengumuman --}}
-        <li>
-            <a href="#"
-               class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
-                📢 <span>Pengumuman</span>
-            </a>
-        </li>
+        
 
         {{-- Master Data --}}
         <li>
@@ -51,7 +45,7 @@
                     </button>
                     <ul x-show="camabaOpen" class="pl-6 mt-1 space-y-1" x-cloak>
                         <li>
-                            <a href="#"
+                            <a href="{{ route('admin.pendaftaran.index') }}"
                                class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
                                 📄 <span>CaMaBa</span>
                             </a>
@@ -65,31 +59,7 @@
                     </ul>
                 </li>
 
-                {{-- Data Kampus --}}
-                <li>
-                    <button @click="kampusOpen = !kampusOpen"
-                            class="flex items-center justify-between w-full py-2 px-3 hover:bg-gray-700 rounded">
-                        <span class="flex items-center gap-2">🏫 Data Kampus</span>
-                        <span x-text="kampusOpen ? '▲' : '▼'"></span>
-                    </button>
-                    <ul x-show="kampusOpen" class="pl-6 mt-1 space-y-1" x-cloak>
-                        <li>
-                            <a href="{{ route('admin.fakultas.index') }}" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
-                                🎓 <span>Fakultas</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.jurusan.index') }}" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
-                                📚 <span>Jurusan</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
-                                💰 <span>UKT</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                
 
                 {{-- Data Wilayah --}}
                 <li>
@@ -110,7 +80,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
+                            <a href="{{ route('admin.kecamatan.index') }}" class="flex items-center gap-2 py-2 px-3 hover:bg-gray-700 rounded">
                                 🏘 <span>Kecamatan</span>
                             </a>
                         </li>

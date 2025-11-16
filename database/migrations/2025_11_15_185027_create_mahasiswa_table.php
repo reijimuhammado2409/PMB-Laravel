@@ -29,9 +29,8 @@ return new class extends Migration
             $table->enum('status_menikah', ['Belum_Menikah', 'Menikah', 'Duda', 'Janda']);
             $table->enum('kewarganegaraan', ['WNI_Asli', 'WNI_Keturunan', 'WNA'])->default('WNI_Asli');
             $table->string('negara_asal')->nullable();
-            $table->foreignId('jurusan_id')->constrained('jurusan')->onDelete('restrict');
-            $table->integer('penghasilan_ortu')->nullable();
             $table->string('foto')->nullable();
+            $table->enum('status', ['pending', 'diterima', 'ditolak'])->default('pending');
             $table->timestamps();
         });
     }
