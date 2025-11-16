@@ -84,9 +84,10 @@ Route::middleware(['auth', 'mahasiswa'])
     ->name('mahasiswa.')
     ->group(function () {
         // Dashboard
-        Route::get('/dashboard', [DashboardController::class, 'mahasiswa'])->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
 
         // Form Pendaftaran Mahasiswa
+        Route::get('/validasimahasiswa', [MahasiswaController::class, 'validasiMahasiswa'])->name('validasiAdmin');
 
         // Form create
         Route::get('/pendaftaran', [MahasiswaController::class, 'create'])->name('pendaftaran.create');
@@ -96,4 +97,12 @@ Route::middleware(['auth', 'mahasiswa'])
 
         // Cek Status Pendaftaran
         Route::get('/pendaftaran/status', [MahasiswaController::class, 'status'])->name('pendaftaran.status');
+
+        // 🔹 Route tambahan untuk AJAX dropdown
+        Route::get('/get-kabupaten/{provinsi_id}', [KecamatanController::class, 'getKabupatenByProvinsi'])
+        ->name('kecamatan.getKabupatenByProvinsi');
+
+        // 🔹 Route tambahan untuk AJAX dropdown
+        Route::get('/get-kecamatan/{kabupaten_id}', [KecamatanController::class, 'getKecamatanByKabupaten'])
+        ->name('kecamatan.getKecamatanByKabupaten');
     });

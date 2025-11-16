@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId('kabupaten_id')->constrained('kabupaten')->onDelete('restrict');
             $table->foreignId('kecamatan_id')->constrained('kecamatan')->onDelete('restrict');
             $table->string('no_hp');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->enum('status_menikah', ['Belum_Menikah', 'Menikah', 'Duda', 'Janda']);
             $table->enum('kewarganegaraan', ['WNI_Asli', 'WNI_Keturunan', 'WNA'])->default('WNI_Asli');
             $table->string('negara_asal')->nullable();

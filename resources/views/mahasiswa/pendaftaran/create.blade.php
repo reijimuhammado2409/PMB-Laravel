@@ -111,7 +111,7 @@
     {{-- No HP --}}
     <div>
         <label class="font-medium">No HP</label>
-        <input type="text" name="no_hp" class="w-full border rounded px-3 py-2"
+        <input type="number" name="no_hp" class="w-full border rounded px-3 py-2"
                value="{{ old('no_hp') }}" required>
     </div>
 
@@ -168,11 +168,23 @@
 {{-- AJAX Dropdown Kabupaten & Kecamatan --}}
 <script>
 document.getElementById('provinsi').addEventListener('change', function() {
-    fetch('/admin/get-kabupaten/' + this.value)
+    fetch('/mahasiswa/get-kabupaten/' + this.value)
         .then(response => response.json())
         .then(data => {
             let kab = document.getElementById('kabupaten');
             kab.innerHTML = '<option value="">-- Pilih Kabupaten --</option>';
+            data.forEach(row => {
+                kab.innerHTML += `<option value="${row.id}">${row.nama}</option>`;
+            });
+        });
+});
+
+document.getElementById('kabupaten').addEventListener('change', function() {
+    fetch('/mahasiswa/get-kecamatan/' + this.value)
+        .then(response => response.json())
+        .then(data => {
+            let kab = document.getElementById('kecamatan');
+            kab.innerHTML = '<option value="">-- Pilih Kecamatan --</option>';
             data.forEach(row => {
                 kab.innerHTML += `<option value="${row.id}">${row.nama}</option>`;
             });

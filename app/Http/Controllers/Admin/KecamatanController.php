@@ -104,4 +104,12 @@ class KecamatanController extends Controller
                               ->get(['id', 'nama']);
         return response()->json($kabupaten);
     }
+
+    public function getKecamatanByKabupaten($kabupaten_id)
+    {
+        $kecamatan = Kecamatan::where('kabupaten_id', $kabupaten_id)
+                              ->orderBy('nama')
+                              ->get(['id', 'nama']);
+        return response()->json($kecamatan);
+    }
 }

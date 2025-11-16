@@ -10,6 +10,7 @@ use App\Models\Agama;
 use App\Models\Provinsi;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
+use App\Models\User;
 
 class MahasiswaController extends Controller
 {
@@ -20,13 +21,25 @@ class MahasiswaController extends Controller
     */
 
     // Tampilkan form pendaftaran
-    public function create()
-    {
-        return view('mahasiswa.pendaftaran.create', [
-            'agama' => Agama::all(),
-            'provinsi' => Provinsi::all()
+            public function create()
+        {
+            // Ambil user yang sedang login
+            $userId = Auth::user()->id;
+
+            // Cek apakah user sudah ada di tabel mahasiswa
+            $mahasiswa = Mahasiswa::where('user_id', $userId)->first();
+
+            if ($mahasiswa) {
+                // Jika ditemukan → lempar ke route validasiAdmin
+                return redirect()->to('/mahasiswa/validasimahasiswa');
+            }
+
+            // Jika tidak ditemukan → tampilkan form pendaftaran mahasiswa
+            return view('mahasiswa.pendaftaran.create', [
+                'agama' => Agama::all(),
+                'provinsi' => Provinsi::all()
         ]);
-    }
+        }
 
     // Simpan data pendaftaran
     public function store(Request $request)
@@ -62,7 +75,7 @@ class MahasiswaController extends Controller
 
         Mahasiswa::create($data);
 
-        return redirect()->route('mahasiswa.pendaftaran.status')
+        return redirect()->route('dashboard.mahasiswa')
             ->with('success', 'Pendaftaran berhasil dikirim!');
     }
 
@@ -127,6 +140,13 @@ class MahasiswaController extends Controller
 
         return redirect()->route('admin.pendaftaran.index')
             ->with('success', 'Data berhasil dihapus.');
+    }
+
+    //validasi mahasiswa oleh admin
+    public function validasiMahasiswa(){
+        $mahasiswa = Mahasiswa::where('user_id', Auth::user()->id)->first();
+
+        return view('mahasiswa.validasiMahasiswa', compact('mahasiswa'));
     }
 
     // Approve pendaftar
