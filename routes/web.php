@@ -16,6 +16,7 @@ use App\Http\Controllers\Mahasiswa\MahasiswaController;
 | Halaman Default
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -51,18 +52,18 @@ Route::middleware(['auth', 'admin'])
 
         // Master Data
         Route::resource('agama', AgamaController::class);
-        
+
         Route::resource('provinsi', ProvinsiController::class)
-        ->parameters(['provinsi' => 'provinsi']);
+            ->parameters(['provinsi' => 'provinsi']);
         Route::resource('kabupaten', KabupatenController::class)
-        ->parameters(['kabupaten' => 'kabupaten']);
+            ->parameters(['kabupaten' => 'kabupaten']);
         Route::resource('kecamatan', KecamatanController::class)
-        ->parameters(['kecamatan' => 'kecamatan']);
+            ->parameters(['kecamatan' => 'kecamatan']);
 
         // 🔹 Route tambahan untuk AJAX dropdown
         Route::get('/get-kabupaten/{provinsi_id}', [KecamatanController::class, 'getKabupatenByProvinsi'])
-        ->name('kecamatan.getKabupatenByProvinsi');
-                
+            ->name('kecamatan.getKabupatenByProvinsi');
+
         // CRUD Pendaftaran Mahasiswa
         Route::get('/pendaftaran', [MahasiswaController::class, 'index'])->name('pendaftaran.index');
         Route::get('/pendaftaran/{id}/edit', [MahasiswaController::class, 'edit'])->name('pendaftaran.edit');
@@ -84,7 +85,7 @@ Route::middleware(['auth', 'mahasiswa'])
     ->name('mahasiswa.')
     ->group(function () {
         // Dashboard
-        Route::get('/dashboard', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
+        Route::get('/dashboard', [DashboardController::class, 'mahasiswa'])->name('dashboard');
 
         // Form Pendaftaran Mahasiswa
         Route::get('/validasimahasiswa', [MahasiswaController::class, 'validasiMahasiswa'])->name('validasiAdmin');
@@ -100,9 +101,9 @@ Route::middleware(['auth', 'mahasiswa'])
 
         // 🔹 Route tambahan untuk AJAX dropdown
         Route::get('/get-kabupaten/{provinsi_id}', [KecamatanController::class, 'getKabupatenByProvinsi'])
-        ->name('kecamatan.getKabupatenByProvinsi');
+            ->name('kecamatan.getKabupatenByProvinsi');
 
         // 🔹 Route tambahan untuk AJAX dropdown
         Route::get('/get-kecamatan/{kabupaten_id}', [KecamatanController::class, 'getKecamatanByKabupaten'])
-        ->name('kecamatan.getKecamatanByKabupaten');
+            ->name('kecamatan.getKecamatanByKabupaten');
     });
